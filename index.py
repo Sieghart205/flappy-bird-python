@@ -12,18 +12,19 @@ screen = pygame.display.set_mode(size)
 
 pygame.display.set_caption("Flappy Bird con una bola morada")
 
-pajarracoSize = width2,height2 = 30,30
+pajarracoSize = width2,height2 = 20,20
 pajarox = (width / 5) - width2 / 2
 pajaroy = (height / 2) - height2 / 2
 velocidad = [0,10]
 pajarraco = pygame.Rect(pajarox,pajaroy,width2,height2)
 
-tuberiaTopSize = tuberiaWidth,tuberiaHeight = 20, random.randint(0, height - 220)
+gap_size = 150
+tuberiaTopSize = tuberiaWidth,tuberiaHeight = 20, random.randint(50, height - gap_size - 50)
 tuberiaTopX = width - tuberiaWidth
 tuberiaTopY = 0
 velocidadTuberiaTop = [0,40]
 tuberiaTop = pygame.Rect(tuberiaTopX,tuberiaTopY,tuberiaWidth,tuberiaHeight)
-
+tuberiaBottomSize = tuberiaBottomWidth, tuberiaBottomHeight = tuberiaWidth, (height - tuberiaHeight - gap_size)
 tuberiaBottomSize = tuberiaBottomWidth, tuberiaBottomHeight = tuberiaWidth, (height - tuberiaHeight)
 tuberiaBottomX = width - tuberiaWidth
 tuberiaBottomY = height - tuberiaBottomHeight +90
@@ -46,9 +47,24 @@ while inGame:
     pajarraco.y += 2
         
 
+    tuberiaTop.x -= 2
+    tuberiaBottom.x -= 2
+
+    if tuberiaTop.x < 0:
+        tuberiaTop.height = random.randint(50, height - gap_size - 50)
+        tuberiaTop.height = random.randint(0, height - 220)
+        tuberiaTop.x = width
+
+    if tuberiaBottom.x < 0:
+        tuberiaBottom.height = height - tuberiaTop.height - gap_size
+        tuberiaBottom.height = height - tuberiaTop.height + 90
+        tuberiaBottom.x = width
+
     if keys[pygame.K_SPACE]:
-        pajarraco.y -= 8
+        pajarraco.y -= 4
     
+    if pygame.Rect.colliderect(pajarraco,tuberiaTop) or pygame.Rect.colliderect(pajarraco,tuberiaBottom):
+        inGame = False
 
     screen.fill(black)
 
